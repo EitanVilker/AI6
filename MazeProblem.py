@@ -1,5 +1,3 @@
-import numpy as np
-
 class MazeProblem:
 
     def __init__(self, maze):
@@ -9,15 +7,21 @@ class MazeProblem:
         self.width = self.maze.width
         self.height = self.maze.height
         self.square_count = self.width * self.height
+
+        # Create transition matrix
         self.transition_matrix = []
         for i in range(self.square_count):
             self.transition_matrix.append([])
             for j in range(self.square_count):
                 self.transition_matrix[i].append(0)
+
+        # Create 1D list of squares
         self.squares = []
         for i in range(self.width):
             for j in range(self.height):
                 self.squares.append(self.get_1D_coord(j, i))
+
+        # Create observation matrix
         self.observation_matrix = []
         for i in range(len(self.colors)):
             self.observation_matrix.append([])
@@ -27,6 +31,8 @@ class MazeProblem:
                     self.observation_matrix[i].append(1 - (len(self.colors) - 1) * 0.04)
                 else:
                     self.observation_matrix[i].append(0.04)
+
+        # Decrease the square count for each wall to discount them from the initial probabilities
         for square in self.squares:
             x, y = self.get_2D_coord(square)
             if not self.maze.is_floor(x, y):
